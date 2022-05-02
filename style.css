@@ -1,0 +1,91 @@
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    color: white;
+    font-size: 20px; 
+    border: none;
+}
+
+body {
+    background-color: rgb(29, 29, 29);
+}
+
+sup {
+    font-size: 10px;
+}
+
+.wrapper {
+    width: 51.8vw;
+    margin: 100px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-conteiner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.marker-container p{
+    font-size: 17px;
+}
+
+.input {
+    width: 90%;
+    text-align: right;
+    padding: 0 10px;
+    background-color: rgb(29, 29, 29);
+    font-size: 30px;
+}
+
+.buttons-conteiner {
+    width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
+}
+
+.button {
+    margin: auto;
+    width: 100px;
+    height: 45px;
+    background-color: rgb(52, 52, 52);
+    border-radius: 7px;
+    border: 3px solid rgb(60, 60, 60);
+    box-shadow: 0 2px 8px 1px rgba(0, 0, 0, 0.695);
+}
+
+.button:hover {
+    background-color: rgb(68, 68, 68);
+    border: none;
+}
+
+.button:active {
+    background-color: rgb(41, 41, 41);
+    border: none;
+}
+
+.blue {
+    color: rgb(128, 0, 255);
+    font-size: 30px;
+}
+
+.equal {
+    
+}
+
+.error p{
+    text-align: right;
+    height: 35px;
+    color: grey;
+}
