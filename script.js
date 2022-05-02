@@ -1,7 +1,8 @@
 let buttons = document.querySelectorAll('.button');
 let button;
 const input = document.getElementById('input');
-let memory = null;
+let memory = 0;
+const memoryP = document.getElementById('memory');
 let raddeg = 'Rad';
 let result;
 let errorP = document.getElementById('error');
@@ -19,12 +20,12 @@ function removeZero() {
 
 function convertString() {
     result = input.value;
-    result = result.replaceAll("√", "Math.sqrt").replaceAll("^", "**")
-    .replaceAll("e", "Math.E").replaceAll("π", "Math.PI")
-    .replace("ln", "Math.log").replace("lg", "Math.log10")
-    .replaceAll("÷", "/").replaceAll("×", "*").replaceAll("sin", "Math.sin")
-    .replaceAll("cos", "Math.cos").replaceAll("ctg", "1/Math.tan")
-    .replaceAll("tg", "Math.tan").replaceAll("%", "/100");
+    result = result.replaceAll('√', 'Math.sqrt').replaceAll('10^(', '100**(').replaceAll('^', '**')
+    .replaceAll('e', 'Math.E').replaceAll('π', 'Math.PI')
+    .replace('ln', 'Math.log').replace('lg', 'Math.log10')
+    .replaceAll('÷', '/').replaceAll('×', '*').replaceAll('sin', 'Math.sin')
+    .replaceAll('cos', 'Math.cos').replaceAll('ctg', '1/Math.tan')
+    .replaceAll('tg', 'Math.tan').replaceAll('%', '/100');
     if (raddeg == 'Deg') { //замена при deg
         const trigonometri = ['Math.sin', 'Math.cos', 'Math.tan'];
         let posStart, posEnd;
@@ -55,9 +56,27 @@ function errorString() {
     return errorP.innerText;
 }
 
+function checkRepeat() { // ИСПРАВИТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    let arrSymbol = ['.', '+', '-', '÷', '×'];
+    let i = input.value.length - 1;
+    if (arrSymbol.includes(input.value[i]) && arrSymbol.includes(input.value[i - 1])
+    || arrSymbol.includes(input.value[i - 1]) && input.value[i] == '%') {
+        input.value = input.value.slice(0, i - 1) + input.value[i];
+        equalFlag = true;
+    }
+}
+
+function equalRes() {
+    if (errorString() != 'Ошибка') {
+        input.value = errorString();
+        equalFlag = true;
+    }
+    errorP.innerText = '';
+}
+
 buttons.forEach((button) => {
     button.addEventListener('click', (event)=>{
-        
+
         switch (button.id) {
 
             case 'button-minus-pow': // 1/x
@@ -66,18 +85,26 @@ buttons.forEach((button) => {
                 break;
 
             case 'button-memory-clear': // MC
-                memory = null;
+                memory = 0;
+                memoryP.textContent = '';
                 break;
 
             case 'button-memory-plus': // M+
                 // memory += "ф-ция ="
+                equalRes();
+                memory += Number(input.value);
+                memoryP.textContent = 'M';
                 break;
 
             case 'button-memory-minus': // M-
                 // memory -= "ф-ция ="
+                equalRes();
+                memory -= Number(input.value);
+                memoryP.textContent = 'M';
                 break;
 
             case 'button-memory-read': // MR
+                removeZero();
                 input.value = memory;
                 break;
 
@@ -163,26 +190,22 @@ buttons.forEach((button) => {
                 break;
                 
             case 'button-equal': // =
-                if (errorString() != 'Ошибка') {
-                    input.value = errorString();
-                    equalFlag = true;
-                }
-                errorP.innerText = '';
+                equalRes();
                 break;
                 
-
             default:
                 removeZero();
                 input.value += button.textContent;
                 break;
-            
-            //ф-ция преобразования строки
-
         }
+        checkRepeat();
         if (equalFlag) {
             equalFlag = false;
         } else {
             errorString();
+        }
+        if (input.value == '9309706') {
+            errorP.innerText = 'сам такой.';
         }
     })
 })
