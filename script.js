@@ -25,13 +25,31 @@ function convertString() {
     .replaceAll("÷", "/").replaceAll("×", "*").replaceAll("sin", "Math.sin")
     .replaceAll("cos", "Math.cos").replaceAll("ctg", "1/Math.tan")
     .replaceAll("tg", "Math.tan").replaceAll("%", "/100");
+    //замена при deg
+    if (raddeg == 'Deg') {
+        const trigonometri = ['Math.sin', 'Math.cos', 'Math.tan'];
+        let posStart, posEnd;
+        let strSlice, strSliceEdit;
+        for (const func of trigonometri) {
+            posStart = result.indexOf(func); //позиция первой цифрки в ф-ции
+            if (posStart != -1) {
+                posStart += 9;
+                posEnd = result.indexOf(')', posStart);
+                strSlice = result.slice(posStart, posEnd);
+                strSliceEdit = eval(Math.PI/180*result.slice(posStart, posEnd));
+                console.log(strSlice + ' Rad');
+                console.log(strSliceEdit + ' Deg');
+                result = result.replace(strSlice, strSliceEdit);
+            }
+        }
+    }
 }
 
 function errorString() {
     convertString();
     try {
         errorP.innerText = eval(result);
-        if (errorP.innerText == 'Infinity') {
+        if (errorP.innerText == 'Infinity' || errorP.innerText == 'NaN' || errorP.innerText == 'undefined') {
             errorP.innerText = 'Ошибка';
         }
     } catch (error) {
@@ -88,7 +106,6 @@ buttons.forEach((button) => {
                 break;
 
             case 'button-backspace': // backspace
-                
                 input.value = input.value == '0' ? input.value : input.value.slice(0, -1);
                 input.value = input.value == '' ? '0' : input.value;
                 break;
@@ -98,7 +115,7 @@ buttons.forEach((button) => {
                 input.value += '!';
                 break;
 
-            case 'button-sqrt':
+            case 'button-sqrt': //√
                 removeZero();
                 input.value += '√(';
                 break;
@@ -140,8 +157,12 @@ buttons.forEach((button) => {
 
             case 'button-deg-rad': // deg / rad
                 raddeg = raddeg == 'Deg' ? 'Rad' : 'Deg';
-                button.textContent = raddeg == 'Deg' ? 'Deg' : 'Rad';
-                document.getElementById('rad-deg').innerText = raddeg == 'Rad' ? 'Deg' : 'Rad';
+                document.getElementById('rad-deg').innerText = raddeg;
+                button.textContent =  raddeg == 'Deg' ? 'Rad' : 'Deg';
+                break;
+
+            case 'button-comma':
+                input.value += '.';
                 break;
                 
             case 'button-equal': // =
