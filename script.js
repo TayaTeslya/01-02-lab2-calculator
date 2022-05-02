@@ -2,9 +2,10 @@ let buttons = document.querySelectorAll('.button');
 let button;
 const input = document.getElementById('input');
 let memory = null;
-let raddeg = 'Deg';
+let raddeg = 'Rad';
 let result;
 let errorP = document.getElementById('error');
+let equalFlag = false;
 
 input.addEventListener('keypress', (event)=>{ //для навигации, отключение возможности писать в инпуте
     event.preventDefault();
@@ -18,19 +19,21 @@ function removeZero() {
 
 function convertString() {
     result = input.value;
-    //replace("√", "Math.sqrt()")
-    result = result.replaceAll("^", "**").replaceAll("e", "Math.E");
-
-
-    //подсчет ( и )
-    // ( > ) в конец )
-    console.log(result);
+    result = result.replaceAll("√", "Math.sqrt").replaceAll("^", "**")
+    .replaceAll("e", "Math.E").replaceAll("π", "Math.PI")
+    .replace("ln", "Math.log").replace("lg", "Math.log10")
+    .replaceAll("÷", "/").replaceAll("×", "*").replaceAll("sin", "Math.sin")
+    .replaceAll("cos", "Math.cos").replaceAll("ctg", "1/Math.tan")
+    .replaceAll("tg", "Math.tan").replaceAll("%", "/100");
 }
 
 function errorString() {
     convertString();
     try {
-        errorP.innerText = eval(result); 
+        errorP.innerText = eval(result);
+        if (errorP.innerText == 'Infinity') {
+            errorP.innerText = 'Ошибка';
+        }
     } catch (error) {
         errorP.innerText = 'Ошибка';
     }
@@ -80,6 +83,8 @@ buttons.forEach((button) => {
 
             case 'button-clear': // c
                 input.value = '0';
+                errorP.innerText = '';
+                equalFlag = true;
                 break;
 
             case 'button-backspace': // backspace
@@ -91,6 +96,11 @@ buttons.forEach((button) => {
             case 'button-factorial': // x!
                 removeZero();
                 input.value += '!';
+                break;
+
+            case 'button-sqrt':
+                removeZero();
+                input.value += '√(';
                 break;
 
             case 'button-sqrt-y': // y√x
@@ -129,15 +139,17 @@ buttons.forEach((button) => {
                 break;
 
             case 'button-deg-rad': // deg / rad
-                button.textContent = raddeg == 'Rad' ? 'Deg' : 'Rad';
-                raddeg = raddeg == 'Rad' ? 'Deg' : 'Rad';
+                raddeg = raddeg == 'Deg' ? 'Rad' : 'Deg';
+                button.textContent = raddeg == 'Deg' ? 'Deg' : 'Rad';
                 document.getElementById('rad-deg').innerText = raddeg == 'Rad' ? 'Deg' : 'Rad';
                 break;
                 
             case 'button-equal': // =
                 if (errorString() != 'Ошибка') {
                     input.value = errorString();
+                    equalFlag = true;
                 }
+                errorP.innerText = '';
                 break;
                 
 
@@ -149,7 +161,10 @@ buttons.forEach((button) => {
             //ф-ция преобразования строки
 
         }
-        errorString();
-        
+        if (equalFlag) {
+            equalFlag = false;
+        } else {
+            errorString();
+        }
     })
 })
