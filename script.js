@@ -3,17 +3,38 @@ let button;
 const input = document.getElementById('input');
 let memory = null;
 let raddeg = 'Deg';
+let result;
+let errorP = document.getElementById('error');
 
-// for (const i in buttons) {
-//     button = document.getElementById(`${buttons[i].id}`);
-//     console.dir(button);
-//     buttons
-// }
+input.addEventListener('keypress', (event)=>{ //для навигации, отключение возможности писать в инпуте
+    event.preventDefault();
+})
 
 function removeZero() {
     if (input.value == '0') {
         input.value = '';
     }
+}
+
+function convertString() {
+    result = input.value;
+    //replace("√", "Math.sqrt()")
+    result = result.replaceAll("^", "**").replaceAll("e", "Math.E");
+
+
+    //подсчет ( и )
+    // ( > ) в конец )
+    console.log(result);
+}
+
+function errorString() {
+    convertString();
+    try {
+        errorP.innerText = eval(result); 
+    } catch (error) {
+        errorP.innerText = 'Ошибка';
+    }
+    return errorP.innerText;
 }
 
 buttons.forEach((button) => {
@@ -82,9 +103,9 @@ buttons.forEach((button) => {
                 input.value += 'ln(';
                 break;
 
-            case 'button-log': // log
+            case 'button-lg': // lg
                 removeZero();
-                input.value += 'log(';
+                input.value += 'lg(';
                 break;
 
             case 'button-sin': // sin
@@ -114,16 +135,21 @@ buttons.forEach((button) => {
                 break;
                 
             case 'button-equal': // =
-
+                if (errorString() != 'Ошибка') {
+                    input.value = errorString();
+                }
                 break;
+                
 
             default:
                 removeZero();
                 input.value += button.textContent;
                 break;
-
+            
             //ф-ция преобразования строки
 
         }
+        errorString();
+        
     })
 })
