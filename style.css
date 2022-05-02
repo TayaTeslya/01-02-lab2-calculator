@@ -84,7 +84,22 @@ sup {
 }
 
 .equal {
-    
+    grid-row-start: 5;
+    grid-row-end: 7;
+    grid-column: 7;
+    height: 100px;
+    background-color: rgb(109, 20, 198);
+    border: 3px solid rgb(119, 29, 209);
+}
+
+.equal:hover {
+    background-color: rgb(127, 28, 227);
+    border: none;
+}
+
+.equal:active {
+    background-color: rgb(84, 14, 154);
+    border: none;
 }
 
 .error p{

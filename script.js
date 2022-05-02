@@ -25,8 +25,7 @@ function convertString() {
     .replaceAll("÷", "/").replaceAll("×", "*").replaceAll("sin", "Math.sin")
     .replaceAll("cos", "Math.cos").replaceAll("ctg", "1/Math.tan")
     .replaceAll("tg", "Math.tan").replaceAll("%", "/100");
-    //замена при deg
-    if (raddeg == 'Deg') {
+    if (raddeg == 'Deg') { //замена при deg
         const trigonometri = ['Math.sin', 'Math.cos', 'Math.tan'];
         let posStart, posEnd;
         let strSlice, strSliceEdit;
@@ -37,8 +36,6 @@ function convertString() {
                 posEnd = result.indexOf(')', posStart);
                 strSlice = result.slice(posStart, posEnd);
                 strSliceEdit = eval(Math.PI/180*result.slice(posStart, posEnd));
-                console.log(strSlice + ' Rad');
-                console.log(strSliceEdit + ' Deg');
                 result = result.replace(strSlice, strSliceEdit);
             }
         }
@@ -110,9 +107,9 @@ buttons.forEach((button) => {
                 input.value = input.value == '' ? '0' : input.value;
                 break;
 
-            case 'button-factorial': // x!
+            case 'button-ten-pow': // 10^x
                 removeZero();
-                input.value += '!';
+                input.value += '10^(';
                 break;
 
             case 'button-sqrt': //√
