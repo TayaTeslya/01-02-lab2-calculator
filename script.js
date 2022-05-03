@@ -20,13 +20,35 @@ function removeZero() {
 
 function convertString() {
     result = input.value;
-    
+    let lengthRes = result.length - 1;
+    for (let i = 0; i < lengthRes - 1; i++) {
+        if (result[i + 1] == '(' && (result[i] == 'e' || result[i] == 'π' || /[0-9]/.test(result[i]))) {
+            result = result.slice(0, i + 1) + '×' + result.slice(i + 1, lengthRes + 1);
+            lengthRes = result.length - 1;
+        }
+        if (result[i + 1] == '√' && (result[i] == 'π' || /[0-9]/.test(result[i]))) {
+            result = result.slice(0, i + 1) + '×' + result.slice(i + 1, lengthRes + 1);
+            lengthRes = result.length - 1;
+        }
+        if ((result[i + 1] == 'π' || result[i + 1] == 'e') && /[0-9]/.test(result[i])) {
+            result = result.slice(0, i + 1) + '×' + result.slice(i + 1);
+            lengthRes = result.length - 1;
+        }
+        let arrFunc = ['sin', 'cos', 'tg(', 'ctg', 'ln(', 'lg('];
+        if (arrFunc.includes(result.slice(i + 1, i + 4)) && (result[i] == 'e' || result[i] == 'π' || /[0-9]/.test(result[i]))) {
+            result = result.slice(0, i + 1) + '×' + result.slice(i + 1, lengthRes + 1);
+            lengthRes = result.length - 1;
+        }
+    }
+    if ((result[lengthRes] == 'π' || result[lengthRes] == 'e') && /[0-9]/.test(result[lengthRes - 1])) {
+        result = result.slice(0, lengthRes) + '×' + result[lengthRes];
+    }
     result = result.replaceAll('√', 'Math.sqrt').replaceAll('10^(', '100**(').replaceAll('^', '**')
     .replaceAll('e', 'Math.E').replaceAll('π', 'Math.PI')
-    .replace('ln', 'Math.log').replace('lg', 'Math.log10')
+    .replaceAll('ln', 'Math.log').replaceAll('lg', 'Math.log10')
     .replaceAll('÷', '/').replaceAll('×', '*').replaceAll('sin', 'Math.sin')
-    .replaceAll('cos', 'Math.cos').replaceAll('ctg', '1/Math.tan')
-    .replaceAll('tg', 'Math.tan').replaceAll('%', '/100');
+    .replaceAll('cos', 'Math.cos').replace('ctg', '1/Math.tan')
+    .replace('tg', 'Math.tan').replaceAll('%', '/100');
     if (raddeg == 'Deg') { //замена при deg
         const trigonometri = ['Math.sin', 'Math.cos', 'Math.tan'];
         let posStart, posEnd;
@@ -211,5 +233,6 @@ buttons.forEach((button) => {
         if (input.value == '9309706') {
             errorP.innerText = 'сам такой.';
         }
+        // место для фичи 
     })
 })
