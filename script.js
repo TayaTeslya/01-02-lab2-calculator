@@ -20,6 +20,7 @@ function removeZero() {
 
 function convertString() {
     result = input.value;
+    
     result = result.replaceAll('√', 'Math.sqrt').replaceAll('10^(', '100**(').replaceAll('^', '**')
     .replaceAll('e', 'Math.E').replaceAll('π', 'Math.PI')
     .replace('ln', 'Math.log').replace('lg', 'Math.log10')
@@ -57,12 +58,15 @@ function errorString() {
 }
 
 function checkRepeat() { // ИСПРАВИТЬ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    let arrSymbol = ['.', '+', '-', '÷', '×'];
+    // if () {
+    //     equalFlag = true;
+    // }
+    let arrSymbol = ['-', '+', '.', '×', '÷'];
     let i = input.value.length - 1;
-    if (arrSymbol.includes(input.value[i]) && arrSymbol.includes(input.value[i - 1])
-    || arrSymbol.includes(input.value[i - 1]) && input.value[i] == '%') {
-        input.value = input.value.slice(0, i - 1) + input.value[i];
-        equalFlag = true;
+    if (arrSymbol.includes(input.value[i]) && arrSymbol.includes(input.value[i-1])) {
+        if (!((input.value[i-1] == '×' || input.value[i-1] == '÷') && input.value[i] == '-')) {
+            input.value = input.value.slice(0, i-1) + input.value[i];
+        }
     }
 }
 
