@@ -158,6 +158,11 @@ buttons.forEach((button) => {
             case 'button-backspace': // backspace
                 input.value = input.value == '0' ? input.value : input.value.slice(0, -1);
                 input.value = input.value == '' ? '0' : input.value;
+                let arrFunc = ['c', 'o', 's', 'i', 'n', 't', 'g', 'l'];
+                while(arrFunc.includes(input.value[input.value.length - 1])) {
+                    input.value = input.value == '0' ? input.value : input.value.slice(0, -1);
+                    input.value = input.value == '' ? '0' : input.value;
+                }
                 break;
 
             case 'button-ten-pow': // 10^x
@@ -233,6 +238,17 @@ buttons.forEach((button) => {
         if (input.value == '9309706') {
             errorP.innerText = 'сам такой.';
         }
-        // место для фичи 
+        ficha();
     })
 })
+
+function ficha() {
+    if (/sin\(.*\)\^\(2\)\+cos\(.*\)\^\(2\)/.test(input.value) || /cos\(.*\)\^\(2\)\+sin\(.*\)\^\(2\)/.test(input.value)) {
+        convertString();
+        if (Math.round(eval(result)) == 1) {
+            errorP.innerText = 'Это не баг, это фича! (тут 1 если че)';
+        }
+    }
+}
+//sin(50)^(2)+cos(50)^(2)
+//cos(100-50)^(2)+sin(50)^(2)
