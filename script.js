@@ -8,7 +8,7 @@ let result;
 let errorP = document.getElementById('error');
 let equalFlag = false;
 
-input.addEventListener('keypress', (event)=>{ //для навигации, отключение возможности писать в инпуте
+input.addEventListener('keypress', (event)=>{ //отключение возможности писать в инпуте
     event.preventDefault();
 })
 
@@ -43,7 +43,7 @@ function convertString() {
     if ((result[lengthRes] == 'π' || result[lengthRes] == 'e') && /[0-9]/.test(result[lengthRes - 1])) {
         result = result.slice(0, lengthRes) + '×' + result[lengthRes];
     }
-    result = result.replaceAll('√', 'Math.sqrt').replaceAll('10^(', '100**(').replaceAll('^', '**')
+    result = result.replaceAll('√', 'Math.sqrt').replaceAll('^', '**')
     .replaceAll('e', 'Math.E').replaceAll('π', 'Math.PI')
     .replaceAll('ln', 'Math.log').replaceAll('lg', 'Math.log10')
     .replaceAll('÷', '/').replaceAll('×', '*').replaceAll('sin', 'Math.sin')
@@ -70,7 +70,7 @@ function errorString() {
     convertString();
     try {
         errorP.innerText = eval(result);
-        if (errorP.innerText == 'Infinity' || errorP.innerText == 'NaN' || errorP.innerText == 'undefined') {
+        if (errorP.innerText == 'Infinity' || errorP.innerText == 'NaN' || errorP.innerText == 'undefined' || errorP.innerText == '-Infinity') {
             errorP.innerText = 'Ошибка';
         }
     } catch (error) {
@@ -106,7 +106,6 @@ buttons.forEach((button) => {
         switch (button.id) {
 
             case 'button-minus-pow': // 1/x
-                removeZero();
                 input.value += '^(-1)';
                 break;
 
@@ -116,10 +115,12 @@ buttons.forEach((button) => {
                 break;
 
             case 'button-memory-plus': // M+
-                // memory += "ф-ция ="
                 equalRes();
-                memory += Number(input.value);
-                memoryP.textContent = 'M';
+                console.log(errorP.textContent);
+                if (errorP.textContent != 'Ошибка') {
+                    memory += Number(input.value);
+                    memoryP.textContent = 'M';
+                }
                 break;
 
             case 'button-memory-minus': // M-
@@ -131,21 +132,18 @@ buttons.forEach((button) => {
 
             case 'button-memory-read': // MR
                 removeZero();
-                input.value = memory;
+                input.value += memory;
                 break;
 
             case 'button-pow-2': // x^2
-                removeZero();
                 input.value += '^(2)';
                 break;
 
             case 'button-pow-3': // x^3
-                removeZero();
                 input.value += '^(3)';
                 break;
 
             case 'button-pow-y': // x^y
-                removeZero();
                 input.value += '^(';
                 break;
 
@@ -176,7 +174,6 @@ buttons.forEach((button) => {
                 break;
 
             case 'button-sqrt-y': // y√x
-                removeZero();
                 input.value += '^(1÷';
                 break;
 
@@ -216,8 +213,17 @@ buttons.forEach((button) => {
                 button.textContent =  raddeg == 'Deg' ? 'Rad' : 'Deg';
                 break;
 
-            case 'button-comma':
-                input.value += '.';
+            case 'button-comma': //.
+            let i;
+            for (i = input.value.length - 1; i >= 0; i--) {
+                if (!/[0-9]/.test(input.value[i]) || i == 0) {
+                    console.log(i);
+                    if (input.value[i] != '.') {
+                        input.value += '.';
+                    }
+                    break;
+                }
+            }
                 break;
                 
             case 'button-equal': // =
@@ -243,6 +249,8 @@ buttons.forEach((button) => {
 })
 
 function ficha() {
+    //sin(50)^(2)+cos(50)^(2)
+    //cos(100-50)^(2)+sin(50)^(2)
     if (/sin\(.*\)\^\(2\)\+cos\(.*\)\^\(2\)/.test(input.value) || /cos\(.*\)\^\(2\)\+sin\(.*\)\^\(2\)/.test(input.value)) {
         convertString();
         if (Math.round(eval(result)) == 1) {
@@ -250,5 +258,3 @@ function ficha() {
         }
     }
 }
-//sin(50)^(2)+cos(50)^(2)
-//cos(100-50)^(2)+sin(50)^(2)
