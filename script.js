@@ -47,8 +47,8 @@ function convertString() {
     .replaceAll('e', 'Math.E').replaceAll('π', 'Math.PI')
     .replaceAll('ln', 'Math.log').replaceAll('lg', 'Math.log10')
     .replaceAll('÷', '/').replaceAll('×', '*').replaceAll('sin', 'Math.sin')
-    .replaceAll('cos', 'Math.cos').replace('ctg', '1/Math.tan')
-    .replace('tg', 'Math.tan').replaceAll('%', '/100');
+    .replaceAll('cos', 'Math.cos').replaceAll('ctg', '1/Math.tan')
+    .replaceAll('tg', 'Math.tan').replaceAll('%', '/100');
     if (raddeg == 'Deg') { //замена при deg
         const trigonometri = ['Math.sin', 'Math.cos', 'Math.tan'];
         let posStart, posEnd;
@@ -59,8 +59,9 @@ function convertString() {
                 posStart += 9;
                 posEnd = result.indexOf(')', posStart);
                 strSlice = result.slice(posStart, posEnd);
-                strSliceEdit = eval(Math.PI/180*result.slice(posStart, posEnd));
+                strSliceEdit = eval(Math.PI/180*(eval(strSlice)));
                 result = result.replace(strSlice, strSliceEdit);
+                console.log(strSlice + ' ' + strSliceEdit);
             }
         }
     }
@@ -214,17 +215,18 @@ buttons.forEach((button) => {
                 break;
 
             case 'button-comma': //.
-            let i;
-            for (i = input.value.length - 1; i >= 0; i--) {
-                if (!/[0-9]/.test(input.value[i]) || i == 0) {
-                    console.log(i);
-                    if (input.value[i] != '.') {
-                        input.value += '.';
+                let i = input.value.length - 1;
+                if (/[0-9]/.test(input.value[i])) {
+                    for (i; i >= 0; i--) {
+                        if (!/[0-9]/.test(input.value[i]) || i == 0) {
+                            if (input.value[i] != '.') {
+                                input.value += '.';
+                            }
+                            break;
+                        }
                     }
-                    break;
                 }
-            }
-                break;
+                    break;
                 
             case 'button-equal': // =
                 equalRes();
